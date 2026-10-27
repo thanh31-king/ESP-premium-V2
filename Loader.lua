@@ -1,7 +1,9 @@
 -- language: Lua, file: Loader.lua
-local BASE_URL = "https://raw.githubusercontent.com/thanh31-king/ESP-premium-V2/main/"
+local BASE_URL = "https://raw.githubusercontent.com/thanh31-king/ESP-premium-V2/refs/heads/main/"
 
 _G.VantaAuth = false
+_G.VantaWindow = nil
+_G.VantaMenuGui = nil
 
 local function RunFile(fileName)
     local url = BASE_URL .. fileName
@@ -17,7 +19,7 @@ local function RunFile(fileName)
             warn("[VANTA] Lỗi chạy " .. fileName .. ": " .. tostring(err))
         end
     else
-        warn("[VANTA] Không tải được " .. fileName .. ". Link có thể sai!")
+        warn("[VANTA] Không tải được " .. fileName)
     end
 end
 
@@ -27,10 +29,13 @@ RunFile("Key.lua")
 -- 2. Chờ xác thực
 task.spawn(function()
     while not _G.VantaAuth do
-        task.wait(0.5)
+        task.wait(0.2)
     end
     task.wait(0.2)
-    -- 3. Nếu Key đúng, tải ESP và Icon
+    
+    -- 3. Chạy lần lượt các file
     RunFile("Main.lua")
+    task.wait(1) -- Chờ 1 giây để Main tạo xong Menu
+    RunFile("Optimizer.lua")
     RunFile("Icon.lua")
 end)
