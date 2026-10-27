@@ -3,7 +3,7 @@ local Rayfield = nil
 pcall(function()
     Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 end)
-if not Rayfield then return warn("[VANTA] Không thể tải Rayfield UI.") end
+if not Rayfield then return warn("[VANTA] Lỗi Rayfield UI.") end
 getgenv().SecureMode = true
 
 local Players = game:GetService("Players")
@@ -30,11 +30,7 @@ local function CreateESP(plr)
         Box = Drawing.new("Square"), Name = Drawing.new("Text"),
         Distance = Drawing.new("Text"), Health = Drawing.new("Text"),
         Tracer = Drawing.new("Line"), HeadDot = Drawing.new("Circle"), Chams = nil,
-        Skeleton = {
-            Head = Drawing.new("Line"), Torso = Drawing.new("Line"),
-            LeftArm = Drawing.new("Line"), RightArm = Drawing.new("Line"),
-            LeftLeg = Drawing.new("Line"), RightLeg = Drawing.new("Line")
-        }
+        Skeleton = { Head = Drawing.new("Line"), Torso = Drawing.new("Line"), LeftArm = Drawing.new("Line"), RightArm = Drawing.new("Line"), LeftLeg = Drawing.new("Line"), RightLeg = Drawing.new("Line") }
     }
     data.Box.Thickness = 1; data.Box.Filled = false; data.Box.Transparency = 1
     data.Name.Size = 14; data.Name.Center = true; data.Name.Outline = true
@@ -162,39 +158,29 @@ Players.PlayerRemoving:Connect(function(plr)
 end)
 
 local Window = Rayfield:CreateWindow({
-    Name = "VANTA | Universal ESP",
-    LoadingTitle = "VANTA ESP", LoadingSubtitle = "Premium Edition",
+    Name = "VANTA | ESP Premium",
+    LoadingTitle = "VANTA ESP", LoadingSubtitle = "Multi-File",
     Theme = "Dark", ToggleUIKeybind = "K", ConfigurationSaving = { Enabled = false }, KeySystem = false,
 })
 
+-- CỰC KỲ QUAN TRỌNG: Lưu lại để Optimizer và Icon có thể dùng
+_G.VantaWindow = Window
+_G.VantaMenuGui = Rayfield.GUI 
+
 local VisualTab = Window:CreateTab("Visuals", 4483362458)
 VisualTab:CreateSection("Thành Phần Cơ Bản")
-VisualTab:CreateToggle({ Name = "Bật ESP (Master)", CurrentValue = true, Callback = function(v) Settings.Enabled = v end })
-VisualTab:CreateToggle({ Name = "Box (Khung)", CurrentValue = true, Callback = function(v) Settings.Box = v end })
-VisualTab:CreateToggle({ Name = "Name (Tên)", CurrentValue = true, Callback = function(v) Settings.Name = v end })
-VisualTab:CreateToggle({ Name = "Distance (Khoảng cách)", CurrentValue = true, Callback = function(v) Settings.Distance = v end })
-VisualTab:CreateToggle({ Name = "Health (Máu)", CurrentValue = true, Callback = function(v) Settings.Health = v end })
+VisualTab:CreateToggle({ Name = "Bật ESP", CurrentValue = true, Callback = function(v) Settings.Enabled = v end })
+VisualTab:CreateToggle({ Name = "Box", CurrentValue = true, Callback = function(v) Settings.Box = v end })
+VisualTab:CreateToggle({ Name = "Name", CurrentValue = true, Callback = function(v) Settings.Name = v end })
+VisualTab:CreateToggle({ Name = "Distance", CurrentValue = true, Callback = function(v) Settings.Distance = v end })
+VisualTab:CreateToggle({ Name = "Health", CurrentValue = true, Callback = function(v) Settings.Health = v end })
 
 VisualTab:CreateSection("Nâng Cao")
-VisualTab:CreateToggle({ Name = "Skeleton (Xương)", CurrentValue = false, Callback = function(v) Settings.Skeleton = v end })
-VisualTab:CreateToggle({ Name = "Head Dot (Chấm đầu)", CurrentValue = false, Callback = function(v) Settings.HeadDot = v end })
-VisualTab:CreateToggle({ Name = "Chams (Highlight)", CurrentValue = false, Callback = function(v) Settings.Chams = v end })
+VisualTab:CreateToggle({ Name = "Skeleton", CurrentValue = false, Callback = function(v) Settings.Skeleton = v end })
+VisualTab:CreateToggle({ Name = "Head Dot", CurrentValue = false, Callback = function(v) Settings.HeadDot = v end })
+VisualTab:CreateToggle({ Name = "Chams", CurrentValue = false, Callback = function(v) Settings.Chams = v end })
 
 local EffectTab = Window:CreateTab("Effects", 4483362458)
-EffectTab:CreateSection("Tracer (Tia laze)")
+EffectTab:CreateSection("Tracer")
 EffectTab:CreateToggle({ Name = "Bật Tracer", CurrentValue = true, Callback = function(v) Settings.Tracer = v end })
-EffectTab:CreateDropdown({
-    Name = "Vị trí bắt đầu", Options = {"Top", "Bottom", "Center"}, CurrentOption = {"Top"},
-    Callback = function(option) Settings.TracerStart = option[1] end,
-})
-
-local SettingsTab = Window:CreateTab("Settings", 4483362458)
-SettingsTab:CreateSection("Cấu Hình")
-SettingsTab:CreateToggle({ Name = "Team Check", CurrentValue = false, Callback = function(v) Settings.TeamCheck = v end })
-SettingsTab:CreateSlider({ Name = "Max Distance", Range = {100, 9999999}, Increment = 1000, Suffix = "m", CurrentValue = 9999999, Callback = function(v) Settings.MaxDistance = v end })
-
-SettingsTab:CreateSection("Màu Sắc")
-SettingsTab:CreateColorPicker({ Name = "Màu Box", Color = Settings.BoxColor, Callback = function(v) Settings.BoxColor = v end })
-SettingsTab:CreateColorPicker({ Name = "Màu Name", Color = Settings.NameColor, Callback = function(v) Settings.NameColor = v end })
-SettingsTab:CreateColorPicker({ Name = "Màu Tracer", Color = Settings.TracerColor, Callback = function(v) Settings.TracerColor = v end })
-SettingsTab:CreateColorPicker({ Name = "Màu Skeleton", Color = Settings.SkeletonColor, Callback = function(v) Settings.SkeletonColor = v end })
+EffectTab:CreateDropdown({ Name = "Vị trí", Options = {"Top", "Bottom", "Center"}, CurrentOption = {"Top"}, Callback = function(o) Settings.TracerStart = o[1] end })
