@@ -70,7 +70,6 @@ local function CheckKey()
         status.TextColor3 = Color3.fromRGB(0, 255, 100)
         status.Text = "Xác thực thành công!"
         btn.Text = "ĐANG TẢI..."
-        
         task.wait(0.5)
         gui:Destroy()
         _G.VantaAuth = true
