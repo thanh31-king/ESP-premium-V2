@@ -1,7 +1,7 @@
 -- language: Lua, file: Loader.lua
 -- *Loader luôn yêu cầu nhập Key mỗi lần Execute*
 
-local REPO_URL = "https://raw.githubusercontent.com/thanh31-king/ESP-hub/refs/heads/main/Main.lua"
+local REPO_URL = "https://raw.githubusercontent.com/thanh31-king/ESP-premium-V2/refs/heads/main/Main.lua"
 local VALID_KEY = "PREMIUM_ESP"
 
 local function LoadMainScript()
