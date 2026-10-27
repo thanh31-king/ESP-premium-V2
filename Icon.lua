@@ -4,11 +4,10 @@ local UserInputService = game:GetService("UserInputService")
 local LP = Players.LocalPlayer
 local PG = LP:WaitForChild("PlayerGui")
 
-local old = PG:FindFirstChild("VANTA_ICON_UI")
-if old then old:Destroy() end
+repeat task.wait(0.1) until _G.VantaMenuGui ~= nil
 
 local floatGui = Instance.new("ScreenGui")
-floatGui.Name = "VANTA_ICON_UI"
+floatGui.Name = "VANTA_ICON"
 floatGui.ResetOnSpawn = false
 floatGui.IgnoreGuiInset = true
 floatGui.DisplayOrder = 2147483647
@@ -24,20 +23,15 @@ floatBtn.Font = Enum.Font.GothamBold
 floatBtn.AutoButtonColor = false
 floatBtn.Parent = floatGui
 Instance.new("UICorner", floatBtn).CornerRadius = UDim.new(1, 0)
-local fStroke = Instance.new("UIStroke", floatBtn)
-fStroke.Color = Color3.fromRGB(0, 255, 255)
-fStroke.Thickness = 1.5
+Instance.new("UIStroke", floatBtn).Color = Color3.fromRGB(0, 255, 255)
 
 local dragging = false
-local dragInput, dragStart, startPos
+local dragStart, startPos
 local isClick = false
 
 floatBtn.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        isClick = true
-        dragStart = input.Position
-        startPos = floatBtn.Position
+        dragging = true; isClick = true; dragStart = input.Position; startPos = floatBtn.Position
     end
 end)
 
@@ -46,12 +40,7 @@ floatBtn.InputEnded:Connect(function(input)
         dragging = false
         if isClick then
             pcall(function()
-                if _G.Rayfield and _G.Rayfield.GUI then
-                    _G.Rayfield.GUI.Enabled = not _G.Rayfield.GUI.Enabled
-                else
-                    local rayGui = PG:FindFirstChild("Rayfield")
-                    if rayGui then rayGui.Enabled = not rayGui.Enabled end
-                end
+                _G.VantaMenuGui.Enabled = not _G.VantaMenuGui.Enabled
             end)
         end
     end
@@ -60,9 +49,7 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local delta = input.Position - dragStart
-        if delta.Magnitude > 5 then
-            isClick = false
-        end
+        if delta.Magnitude > 15 then isClick = false end
         floatBtn.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
